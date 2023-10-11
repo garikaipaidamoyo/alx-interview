@@ -5,21 +5,17 @@ def minOperations(n):
         return 0
 
     operations = 0
-    factor = 2
+    divisor = 2
 
-    while factor * factor <= n:
-        while n % factor == 0:
-            operations += factor
-            n //= factor
-        factor += 1
-
-    if n > 1:
-        operations += n
+    while n > 1:
+        while n % divisor == 0:
+            operations += divisor
+            n //= divisor
+        divisor += 1
 
     return operations
 
-# Test cases
-n = 4
+n = 9
 print("Min # of operations to reach {} char: {}".format(n, minOperations(n)))
 
 n = 12
