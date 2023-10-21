@@ -1,5 +1,14 @@
 #!/usr/bin/python3
 
+"""
+Log Parsing Script
+
+This script reads log data and computes metrics.
+
+Input format: ...
+After every 10 lines...
+"""
+
 import sys
 
 
@@ -52,4 +61,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()\n
+    main()
