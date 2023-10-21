@@ -37,11 +37,14 @@ def main():
                 status_code = parts[-2]
                 file_size = int(parts[-1])
 
+                # Ensure the status code is a digit
                 if status_code.isdigit():
                     status_code = int(status_code)
 
-                    # Update status counts
-                    if status_code in [200, 301, 400, 401, 403, 404, 405, 500]:
+                    # Check if it's a valid status code
+                    valid_status_codes = [200, 301, 400, 401, 403,
+                                          404, 405, 500]
+                    if status_code in valid_status_codes:
                         if status_code in status_counts:
                             status_counts[status_code] += 1
                         else:
