@@ -8,19 +8,21 @@ def validUTF8(data):
     num_bytes = 0
 
     for byte in data:
+        byte_bin = format(byte, '08b')
+
         if num_bytes == 0:
-            if (byte >> 7) == 0b0:
+            if byte_bin[0] == '0':
                 num_bytes = 0
-            elif (byte >> 5) == 0b110:
+            elif byte_bin[:3] == '110':
                 num_bytes = 1
-            elif (byte >> 4) == 0b1110:
+            elif byte_bin[:4] == '1110':
                 num_bytes = 2
-            elif (byte >> 3) == 0b11110:
+            elif byte_bin[:5] == '11110':
                 num_bytes = 3
             else:
                 return False
         else:
-            if (byte >> 6) != 0b10:
+            if not byte_bin.startswith('10'):
                 return False
             num_bytes -= 1
 
