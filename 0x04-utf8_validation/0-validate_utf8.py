@@ -52,3 +52,7 @@ if __name__ == "__main":
 
     data = [194, 160]
     print(validUTF8(data))
+
+    # Test case that failed previously
+    data = [146]
+    print(validUTF8(data))
