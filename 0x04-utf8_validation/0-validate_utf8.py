@@ -5,33 +5,27 @@ UTF-8 Validation
 
 
 def validUTF8(data):
-    # Initialize the number of expected following bytes
-    num_following_bytes = 0
+    num_bytes = 0
 
     for byte in data:
-        # Check if the byte is a following byte
-        if 128 <= byte <= 191:
-            if num_following_bytes:
-                num_following_bytes -= 1
-            else:
+        if num_bytes == 0:
+            if (byte >> 5) == 0b110:
+                return False
+            elif (byte >> 4) == 0b1110:
+                num_bytes = 1
+            elif (byte >> 3) == 0b11110:
+                num_bytes = 2
+            elif (byte >> 7):
                 return False
         else:
-            # Determine the number of following bytes based on the MSB
-            if 192 <= byte <= 223:
-                num_following_bytes = 1
-            elif 224 <= byte <= 239:
-                num_following_bytes = 2
-            elif 240 <= byte <= 247:
-                num_following_bytes = 3
-            elif byte > 247:
+            if (byte >> 6) != 0b10:
                 return False
+            num_bytes -= 1
 
-    # If all bytes were processed, and we expected 0 following bytes,
-    # it's valid
-    return num_following_bytes == 0
+    return num_bytes == 0
 
 
-if __name__ == "__main__":
+if __name__ == "__main":
     data = [65]
     print(validUTF8(data))
 
