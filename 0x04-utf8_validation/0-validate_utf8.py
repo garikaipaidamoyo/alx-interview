@@ -32,3 +32,14 @@ def validUTF8(data):
     # If all bytes were processed, and we expected 0 following bytes,
     # it's valid
     return num_following_bytes == 0
+
+
+# Test cases
+data1 = [65]
+print(validUTF8(data1))  # Should print True
+
+data2 = [80, 121, 116, 104, 111, 110, 32, 105, 115, 32, 99, 111, 111, 108, 33]
+print(validUTF8(data2))  # Should print True
+
+data3 = [229, 65, 127, 256]
+print(validUTF8(data3))  # Should print False
