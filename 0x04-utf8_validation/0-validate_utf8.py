@@ -5,34 +5,30 @@ UTF-8 Validation
 
 
 def validUTF8(data):
-    bytes_to_follow = 0
+    # Create a mask for the most significant bit (MSB) of a byte
+    msb_mask = 1 << 7
+    # Create a mask to check if the byte is a multibyte character
+    multibyte_mask = 1 << 6
+    # Initialize the number of expected following bytes
+    num_following_bytes = 0
 
     for byte in data:
-        if bytes_to_follow == 0:
-            if byte & 0x80 == 0:  # Single-byte character
-                bytes_to_follow = 0
-            elif byte & 0xE0 == 0xC0:  # Two-byte character
-                bytes_to_follow = 1
-            elif byte & 0xF0 == 0xE0:  # Three-byte character
-                bytes_to_follow = 2
-            elif byte & 0xF8 == 0xF0:  # Four-byte character
-                bytes_to_follow = 3
+        # If we expect following bytes, check if the byte is a following byte
+        if num_following_bytes:
+            if byte & msb_mask and not byte & multibyte_mask:
+                num_following_bytes -= 1
             else:
                 return False
         else:
-            if byte & 0xC0 != 0x80:  # Check if the byte is a following byte
+            # Determine the number of following bytes based on the MSB
+            while byte & msb_mask:
+                num_following_bytes += 1
+                byte <<= 1
+
+            # For a single-byte character, num_following_bytes should be 0
+            if num_following_bytes == 1 or num_following_bytes > 4:
                 return False
-            bytes_to_follow -= 1
 
-    return bytes_to_follow == 0
-
-
-# Test cases
-data1 = [65]
-print(validUTF8(data1))  # Should print True
-
-data2 = [80, 121, 116, 104, 111, 110, 32, 105, 115, 32, 99, 111, 111, 108, 33]
-print(validUTF8(data2))  # Should print True
-
-data3 = [229, 65, 127, 256]
-print(validUTF8(data3))  # Should print False
+    # If all bytes were processed, and we expected 0 following bytes,
+    # it's valid
+    return num_following_bytes == 0
