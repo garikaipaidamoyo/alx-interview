@@ -3,6 +3,7 @@
 UTF-8 Validation
 """
 
+
 def validUTF8(data):
     # Create a mask for the most significant bit (MSB) of a byte
     msb_mask = 1 << 7
@@ -28,5 +29,6 @@ def validUTF8(data):
             if num_following_bytes == 1 or num_following_bytes > 4:
                 return False
 
-    # If all bytes were processed, and we expected 0 following bytes, it's valid
+    # If all bytes were processed, and we expected 0 following bytes,
+    # it's valid
     return num_following_bytes == 0
