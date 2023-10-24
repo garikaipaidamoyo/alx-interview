@@ -10,11 +10,11 @@ def validUTF8(data):
     for byte in data:
         if num_bytes == 0:
             if (byte >> 5) == 0b110:
-                return False
-            elif (byte >> 4) == 0b1110:
                 num_bytes = 1
-            elif (byte >> 3) == 0b11110:
+            elif (byte >> 4) == 0b1110:
                 num_bytes = 2
+            elif (byte >> 3) == 0b11110:
+                num_bytes = 3
             elif (byte >> 7):
                 return False
         else:
@@ -34,4 +34,17 @@ if __name__ == "__main":
     print(validUTF8(data))
 
     data = [229, 65, 127, 256]
+    print(validUTF8(data))
+
+    # Additional test cases
+    data = [197, 130, 1]
+    print(validUTF8(data))
+
+    data = [235, 140, 4]
+    print(validUTF8(data))
+
+    data = [240, 160, 130, 130]
+    print(validUTF8(data))
+
+    data = [194, 160]
     print(validUTF8(data))
