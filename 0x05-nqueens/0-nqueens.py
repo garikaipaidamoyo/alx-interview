@@ -2,35 +2,39 @@
 import sys
 
 
-def is_safe(board, row, col):
-    # Check if there's a queen in the same column
-    for i in range(row):
-        if board[i] == col or board[i] - i == col - row or board[
-                i] + i == col + row:
+def is_safe(board, row, col, queens):
+    for prev_row in range(row):
+        prev_col = queens[prev_row]
+        if (prev_col == col or prev_col - prev_row == col - row
+                or prev_col + prev_row == col + row):
             return False
     return True
 
 
 def solve_nqueens(N):
 
-    def solve(row, board):
+    def solve(row, queens, solutions):
         if row == N:
-            return [board[:]]
-        solutions = []
-        for col in range(N):
-            if is_safe(board, row, col):
-                board[row] = col
-                solutions += solve(row + 1, board)
-                board[row] = -1
-        return solutions
+            solutions.append(queens[:])
+            return
 
+        for col in range(N):
+            if is_safe(board, row, col, queens):
+                queens.append(col)
+                solve(row + 1, queens, solutions)
+                queens.pop()
+
+    solutions = []
     board = [-1] * N
-    return solve(0, board)
+    solve(0, [], solutions)
+    return solutions
 
 
 def print_solution(solution):
     for row in solution:
-        print([row[i] for i in range(len(row))])
+        queens = [-1] * len(solution)
+        queens[row] = solution[row]
+        print(queens)
 
 
 def main():
