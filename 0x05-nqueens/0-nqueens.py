@@ -32,9 +32,7 @@ def solve_nqueens(N):
 
 def print_solution(solution):
     for row in solution:
-        queens = [-1] * len(solution)
-        queens[row] = solution[row]
-        print(queens)
+        print([row[i] for i in range(len(row))])
 
 
 def main():
