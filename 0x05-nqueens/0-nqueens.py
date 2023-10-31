@@ -2,48 +2,35 @@
 import sys
 
 
-def is_safe(board, row, col, N):
+def is_safe(board, row, col):
     # Check if there's a queen in the same column
     for i in range(row):
-        if board[i][col] == 1:
+        if board[i] == col or board[i] - i == col - row or board[
+                i] + i == col + row:
             return False
-
-    # Check upper left diagonal
-    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
-        if board[i][j] == 1:
-            return False
-
-    # Check upper right diagonal
-    for i, j in zip(range(row, -1, -1), range(col, N)):
-        if board[i][j] == 1:
-            return False
-
     return True
 
 
 def solve_nqueens(N):
-    board = [[0 for _ in range(N)] for _ in range(N)]
-    solutions = []
 
-    def solve(row):
+    def solve(row, board):
         if row == N:
-            solutions.append([row[:] for row in board])
-            return
-
+            return [board[:]]
+        solutions = []
         for col in range(N):
-            if is_safe(board, row, col, N):
-                board[row][col] = 1
-                solve(row + 1)
-                board[row][col] = 0
+            if is_safe(board, row, col):
+                board[row] = col
+                solutions += solve(row + 1, board)
+                board[row] = -1
+        return solutions
 
-    solve(0)
-    return solutions
+    board = [-1] * N
+    return solve(0, board)
 
 
 def print_solution(solution):
     for row in solution:
-        print(row)
-    print()
+        print([row[i] for i in range(len(row))])
 
 
 def main():
@@ -60,6 +47,7 @@ def main():
         solutions = solve_nqueens(N)
         for solution in solutions:
             print_solution(solution)
+            print()
 
     except ValueError:
         print("N must be a number")
