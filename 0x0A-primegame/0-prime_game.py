@@ -1,46 +1,61 @@
 #!/usr/bin/python3
+""" Prime Game """
 
 
-def is_prime(num):
-    if num < 2:
-        return False
-    for i in range(2, int(num**0.5) + 1):
-        if num % i == 0:
+def isprime(n):
+    """ Return prime number """
+    for i in range(2, n):
+        if n % i == 0:
             return False
     return True
 
 
-def remove_multiples(nums, prime):
-    return [num for num in nums if num % prime != 0]
+def delete_numbers(n, nums):
+    """ Remove numbers - return zero """
+    for i in range(len(nums)):
+        if nums[i] % n == 0:
+            nums[i] = 0
 
 
 def isWinner(x, nums):
-    ben_wins = 0
-    maria_wins = 0
-
-    for n in nums:
-        primes = [i for i in range(2, n + 1) if is_prime(i)]
-
-        while primes:
-            ben_turn = True
-
-            for prime in primes:
-                if ben_turn:
-                    ben_wins += 1
-                    primes = remove_multiples(primes, prime)
-                else:
-                    maria_wins += 1
-                    primes = remove_multiples(primes, prime)
-
-                ben_turn = not ben_turn
-
-    if ben_wins > maria_wins:
-        return "Ben"
-    elif maria_wins > ben_wins:
-        return "Maria"
-    else:
+    """ Return name of player that won
+    most rounds
+    """
+    nums.sort()
+    winner = False
+    Maria = 0
+    Ben = 0
+    for game in range(x):
+        # prints("game# ", game+1)
+        nums2 = list(range(1, nums[game] + 1))
+        # print("nums: ", nums2)
+        turn = 0
+        while True:
+            """
+            # monitor turns, uncomment to watch
+            if turn % 2 != 0:
+                print("Ben turn ")
+            else:
+                print("Maria turn ")
+            """
+            change = False
+            for i, n in enumerate(nums2):
+                # print("n: ", n, "i: ", i)
+                if n > 1 and isprime(n):
+                    delete_numbers(n, nums2)
+                    change = True
+                    turn += 1
+                    break
+            # print("movement: ". nums2)
+            if change is False:
+                break
+        if turn % 2 != 0:
+            Maria += 1
+        else:
+            Ben += 1
+        # print("Maria: {}, Ben: {}".format(Maria, Ben))
+    if Maria == Ben:
         return None
-
-
-# Testing the  function
-print("Winner:", isWinner(3, [4, 5, 1]))
+    if Maria > Ben:
+        return "Maria"
+    return "Ben"
