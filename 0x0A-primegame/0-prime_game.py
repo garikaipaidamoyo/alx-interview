@@ -15,7 +15,9 @@ def isWinner(x, nums):
     maria_wins = 0
 
     for n in nums:
+        # Using the range up to the current maximum number in the set
         prime_count = sum(1 for i in range(1, n + 1) if is_prime(i))
+
         if prime_count % 2 == 0:
             ben_wins += 1
         else:
@@ -29,4 +31,5 @@ def isWinner(x, nums):
         return None
 
 
-print("Winner:", isWinner(5, [2, 5, 1, 4, 3]))
+# Testing the function
+print("Winner:", isWinner(3, [4, 5, 1]))
