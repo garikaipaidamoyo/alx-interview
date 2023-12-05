@@ -10,18 +10,29 @@ def is_prime(num):
     return True
 
 
+def remove_multiples(nums, prime):
+    return [num for num in nums if num % prime != 0]
+
+
 def isWinner(x, nums):
     ben_wins = 0
     maria_wins = 0
 
     for n in nums:
-        # Using the range up to the current maximum number in the set
-        prime_count = sum(1 for i in range(1, n + 1) if is_prime(i))
+        primes = [i for i in range(2, n + 1) if is_prime(i)]
 
-        if prime_count % 2 == 0:
-            ben_wins += 1
-        else:
-            maria_wins += 1
+        while primes:
+            ben_turn = True
+
+            for prime in primes:
+                if ben_turn:
+                    ben_wins += 1
+                    primes = remove_multiples(primes, prime)
+                else:
+                    maria_wins += 1
+                    primes = remove_multiples(primes, prime)
+
+                ben_turn = not ben_turn
 
     if ben_wins > maria_wins:
         return "Ben"
@@ -31,5 +42,5 @@ def isWinner(x, nums):
         return None
 
 
-# Testing the function
+# Testing the  function
 print("Winner:", isWinner(3, [4, 5, 1]))
